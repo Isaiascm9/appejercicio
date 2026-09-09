@@ -6,8 +6,6 @@
 <title>Pulso — Entrena a tu ritmo</title>
 <meta name="description" content="App de entrenamiento con registro serie por serie, récords personales e historial. Tus datos se guardan en tu navegador.">
 <meta name="theme-color" content="#0F1615">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Pulso">
@@ -295,14 +293,11 @@
       </div>
 
       <div class="card r-card p-4 space-y-3">
-        <div>
-          <p class="text-sm font-semibold mb-1">Almacenamiento</p>
-          <p class="text-xs" style="color:var(--ink-dim)" id="storage-status">Comprobando…</p>
-        </div>
+        <div><p class="text-sm font-semibold mb-1">Almacenamiento</p>
+        <p class="text-xs" style="color:var(--ink-dim)" id="storage-status">Comprobando…</p></div>
         <div style="border-top:1px solid var(--line)" class="pt-3">
-          <p class="text-sm font-semibold mb-1">Sin conexión</p>
-          <p class="text-xs" style="color:var(--ink-dim)" id="offline-status">Comprobando…</p>
-        </div>
+        <p class="text-sm font-semibold mb-1">Sin conexión</p>
+        <p class="text-xs" style="color:var(--ink-dim)" id="offline-status">Comprobando…</p></div>
       </div>
 
       <div class="card r-card overflow-hidden">
@@ -355,8 +350,9 @@
   </div>
 
   <div class="flex-1 overflow-y-auto hide-scroll px-5 pb-4">
-    <div class="w-full h-40 r-lg flex items-center justify-center mb-4 breathe" style="background:var(--coral-dim); border:1.5px solid rgba(255,90,60,.35)">
-      <span id="workout-exercise-icon" class="ic text-6xl" data-icon="figure" style="color:var(--coral)"></span>
+    <div class="w-full r-lg mb-4 relative" style="height:190px; background:var(--coral-dim); border:1.5px solid rgba(255,90,60,.35)">
+      <div id="exercise-figure" class="w-full h-full"></div>
+      <span id="workout-exercise-icon" class="ic text-4xl absolute right-3 bottom-3 opacity-40" data-icon="figure" style="color:var(--coral)"></span>
     </div>
     <h2 id="workout-exercise-name" class="disp text-2xl">Ejercicio</h2>
     <p id="workout-exercise-desc" class="text-xs mt-1.5" style="color:var(--ink-dim)">—</p>
@@ -544,6 +540,52 @@ function blankState(){
   };
 }
 const todayKey=()=> new Date().toISOString().slice(0,10);
+
+const POSES={"flexion":[{"head":[62,88],"neck":[74,94],"hip":[122,112],"sh":[78,96],"el":[78,124],"wr":[78,150],"kn":[150,124],"an":[172,150],"toe":[180,150],"props":[]},{"head":[58,116],"neck":[72,120],"hip":[120,130],"sh":[76,122],"el":[58,146],"wr":[76,150],"kn":[150,138],"an":[172,152],"toe":[180,152],"props":[]}],"flexion_incl":[{"head":[58,74],"neck":[72,82],"hip":[124,116],"sh":[76,84],"el":[74,110],"wr":[70,132],"kn":[152,132],"an":[174,158],"toe":[182,158],"props":[]},{"head":[54,100],"neck":[70,106],"hip":[122,132],"sh":[74,108],"el":[54,128],"wr":[70,132],"kn":[152,144],"an":[174,160],"toe":[182,160],"props":[]}],"sentadilla":[{"head":[100,36],"neck":[100,52],"hip":[100,100],"sh":[100,56],"el":[112,80],"wr":[124,104],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo"]},{"head":[92,60],"neck":[94,76],"hip":[88,118],"sh":[96,80],"el":[116,96],"wr":[134,92],"kn":[120,140],"an":[96,176],"toe":[110,178],"props":["suelo"]}],"goblet":[{"head":[100,36],"neck":[100,52],"hip":[100,100],"sh":[106,56],"el":[118,80],"wr":[112,66],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","mancuerna"]},{"head":[92,60],"neck":[94,76],"hip":[88,118],"sh":[100,80],"el":[112,104],"wr":[106,90],"kn":[120,140],"an":[96,176],"toe":[110,178],"props":["suelo","mancuerna"]}],"plancha":[{"head":[52,112],"neck":[68,116],"hip":[120,132],"sh":[70,118],"el":[60,144],"wr":[84,150],"kn":[152,142],"an":[176,158],"toe":[184,158],"props":[]},{"head":[52,110],"neck":[68,114],"hip":[120,130],"sh":[70,116],"el":[60,142],"wr":[84,148],"kn":[152,140],"an":[176,156],"toe":[184,156],"props":[]}],"remo":[{"head":[56,72],"neck":[72,78],"hip":[124,96],"sh":[74,80],"el":[72,112],"wr":[70,142],"kn":[136,140],"an":[140,176],"toe":[154,178],"props":[]},{"head":[56,72],"neck":[72,78],"hip":[124,96],"sh":[74,80],"el":[92,102],"wr":[96,80],"kn":[136,140],"an":[140,176],"toe":[154,178],"props":[]}],"press_alto":[{"head":[96,38],"neck":[98,54],"hip":[100,102],"sh":[108,58],"el":[130,76],"wr":[126,50],"kn":[100,142],"an":[100,176],"toe":[114,178],"props":["suelo","barra_manos"]},{"head":[96,38],"neck":[98,54],"hip":[100,102],"sh":[108,58],"el":[116,30],"wr":[114,6],"kn":[100,142],"an":[100,176],"toe":[114,178],"props":["suelo","barra_manos"]}],"curl":[{"head":[100,34],"neck":[100,50],"hip":[100,100],"sh":[108,56],"el":[112,86],"wr":[114,116],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","mancuerna"]},{"head":[100,34],"neck":[100,50],"hip":[100,100],"sh":[108,56],"el":[112,86],"wr":[96,58],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","mancuerna"]}],"lateral":[{"head":[100,34],"neck":[100,50],"hip":[100,100],"sh":[108,56],"el":[112,82],"wr":[114,108],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","mancuerna"]},{"head":[100,34],"neck":[100,50],"hip":[100,100],"sh":[108,56],"el":[140,58],"wr":[172,56],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","mancuerna"]}],"triceps_nuca":[{"head":[96,36],"neck":[98,52],"hip":[100,100],"sh":[106,56],"el":[112,28],"wr":[132,48],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","mancuerna"]},{"head":[96,36],"neck":[98,52],"hip":[100,100],"sh":[106,56],"el":[112,28],"wr":[116,4],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","mancuerna"]}],"bisagra":[{"head":[100,36],"neck":[100,52],"hip":[100,100],"sh":[106,56],"el":[110,84],"wr":[112,112],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":["suelo","barra_manos"]},{"head":[66,74],"neck":[80,80],"hip":[124,98],"sh":[86,82],"el":[90,112],"wr":[92,142],"kn":[132,138],"an":[126,176],"toe":[140,178],"props":["suelo","barra_manos"]}],"zancada":[{"head":[100,36],"neck":[100,52],"hip":[100,100],"sh":[100,56],"el":[100,84],"wr":[100,112],"kn":[100,140],"an":[100,176],"toe":[114,178],"props":[]},{"head":[100,52],"neck":[100,68],"hip":[102,114],"sh":[100,72],"el":[100,100],"wr":[100,126],"kn":[64,144],"an":[60,176],"toe":[46,178],"props":[]}],"puente":[{"head":[44,158],"neck":[60,156],"hip":[112,158],"sh":[60,156],"el":[48,168],"wr":[38,176],"kn":[140,150],"an":[146,176],"toe":[160,178],"props":["suelo"]},{"head":[44,158],"neck":[60,156],"hip":[112,126],"sh":[60,156],"el":[48,168],"wr":[38,176],"kn":[142,140],"an":[146,176],"toe":[160,178],"props":["suelo"]}],"dominada":[{"head":[104,74],"neck":[104,90],"hip":[104,136],"sh":[106,92],"el":[104,58],"wr":[100,26],"kn":[106,166],"an":[104,196],"toe":[118,198],"props":["barra_alta"]},{"head":[104,44],"neck":[104,60],"hip":[104,106],"sh":[106,62],"el":[84,42],"wr":[100,26],"kn":[106,136],"an":[104,166],"toe":[118,168],"props":["barra_alta"]}],"crunch":[{"head":[40,150],"neck":[56,150],"hip":[108,156],"sh":[56,150],"el":[40,140],"wr":[30,150],"kn":[140,140],"an":[150,176],"toe":[164,178],"props":[]},{"head":[56,124],"neck":[68,132],"hip":[108,156],"sh":[68,132],"el":[54,124],"wr":[44,132],"kn":[140,140],"an":[150,176],"toe":[164,178],"props":[]}],"colgado":[{"head":[100,60],"neck":[100,76],"hip":[100,122],"sh":[102,78],"el":[100,50],"wr":[98,26],"kn":[100,156],"an":[100,190],"toe":[114,192],"props":["barra_alta"]},{"head":[100,60],"neck":[100,76],"hip":[100,122],"sh":[102,78],"el":[100,50],"wr":[98,26],"kn":[146,110],"an":[168,136],"toe":[180,132],"props":["barra_alta"]}],"superman":[{"head":[44,150],"neck":[60,152],"hip":[120,156],"sh":[60,152],"el":[38,152],"wr":[18,154],"kn":[150,158],"an":[176,162],"toe":[186,160],"props":[]},{"head":[44,136],"neck":[60,142],"hip":[120,152],"sh":[60,142],"el":[36,134],"wr":[16,128],"kn":[150,146],"an":[176,136],"toe":[186,132],"props":[]}],"fondo":[{"head":[84,60],"neck":[86,76],"hip":[88,122],"sh":[92,78],"el":[96,102],"wr":[96,128],"kn":[140,128],"an":[178,138],"toe":[186,142],"props":["banco_bajo"]},{"head":[84,92],"neck":[86,108],"hip":[88,148],"sh":[92,110],"el":[96,134],"wr":[96,128],"kn":[140,150],"an":[178,156],"toe":[186,160],"props":["banco_bajo"]}],"pike":[{"head":[66,96],"neck":[76,90],"hip":[120,50],"sh":[78,92],"el":[70,118],"wr":[60,146],"kn":[150,96],"an":[168,168],"toe":[180,170],"props":[]},{"head":[58,126],"neck":[70,116],"hip":[120,52],"sh":[72,118],"el":[52,140],"wr":[60,148],"kn":[150,98],"an":[168,168],"toe":[180,170],"props":[]}],"rodillas":[{"head":[100,32],"neck":[100,48],"hip":[100,96],"sh":[100,52],"el":[76,68],"wr":[70,44],"kn":[96,136],"an":[96,174],"toe":[110,176],"props":[]},{"head":[100,32],"neck":[100,48],"hip":[100,96],"sh":[100,52],"el":[122,70],"wr":[128,46],"kn":[132,104],"an":[150,132],"toe":[160,126],"props":[]}],"jumping":[{"head":[100,34],"neck":[100,50],"hip":[100,100],"sh":[100,54],"el":[96,80],"wr":[94,108],"kn":[100,140],"an":[100,176],"toe":[112,178],"props":[]},{"head":[100,30],"neck":[100,46],"hip":[100,96],"sh":[100,50],"el":[66,44],"wr":[44,22],"kn":[126,138],"an":[150,172],"toe":[162,174],"props":[]}],"step":[{"head":[104,50],"neck":[104,66],"hip":[104,114],"sh":[106,70],"el":[106,98],"wr":[106,124],"kn":[106,152],"an":[108,182],"toe":[122,184],"props":["cajon"]},{"head":[80,26],"neck":[82,42],"hip":[84,90],"sh":[86,46],"el":[86,74],"wr":[86,100],"kn":[58,116],"an":[52,146],"toe":[38,148],"props":["cajon"]}],"press_banca":[{"head":[40,118],"neck":[58,120],"hip":[120,124],"sh":[58,120],"el":[58,94],"wr":[58,68],"kn":[150,120],"an":[168,150],"toe":[180,152],"props":["banco_alto","barra_manos"]},{"head":[40,118],"neck":[58,120],"hip":[120,124],"sh":[58,120],"el":[36,106],"wr":[58,94],"kn":[150,120],"an":[168,150],"toe":[180,152],"props":["banco_alto","barra_manos"]}],"jalon":[{"head":[100,66],"neck":[100,82],"hip":[100,128],"sh":[106,84],"el":[112,54],"wr":[110,24],"kn":[112,158],"an":[120,188],"toe":[134,190],"props":["polea_alta"]},{"head":[100,66],"neck":[100,82],"hip":[100,128],"sh":[106,84],"el":[134,74],"wr":[112,50],"kn":[112,158],"an":[120,188],"toe":[134,190],"props":["polea_alta"]}],"apertura":[{"head":[40,120],"neck":[58,120],"hip":[120,124],"sh":[58,120],"el":[56,96],"wr":[58,70],"kn":[150,120],"an":[168,150],"toe":[180,152],"props":[]},{"head":[40,120],"neck":[58,120],"hip":[120,124],"sh":[58,120],"el":[34,110],"wr":[14,102],"kn":[150,120],"an":[168,150],"toe":[180,152],"props":[]}],"hip_thrust":[{"head":[40,116],"neck":[56,120],"hip":[106,158],"sh":[56,120],"el":[46,138],"wr":[38,154],"kn":[140,148],"an":[148,180],"toe":[162,182],"props":["banco_alto","disco"]},{"head":[40,116],"neck":[56,120],"hip":[106,124],"sh":[56,120],"el":[46,138],"wr":[38,154],"kn":[142,126],"an":[148,180],"toe":[162,182],"props":["banco_alto","disco"]}],"patada":[{"head":[44,116],"neck":[62,120],"hip":[120,124],"sh":[62,120],"el":[62,148],"wr":[62,174],"kn":[150,150],"an":[160,176],"toe":[174,178],"props":[]},{"head":[44,116],"neck":[62,120],"hip":[120,124],"sh":[62,120],"el":[62,148],"wr":[62,174],"kn":[158,116],"an":[186,104],"toe":[196,110],"props":[]}],"mountain":[{"head":[50,104],"neck":[66,110],"hip":[120,126],"sh":[68,112],"el":[70,140],"wr":[72,166],"kn":[152,138],"an":[178,164],"toe":[186,164],"props":[]},{"head":[50,104],"neck":[66,110],"hip":[120,126],"sh":[68,112],"el":[70,140],"wr":[72,166],"kn":[104,132],"an":[118,152],"toe":[128,148],"props":[]}],"bulgara":[{"head":[98,42],"neck":[98,58],"hip":[98,106],"sh":[104,62],"el":[104,90],"wr":[104,116],"kn":[96,146],"an":[94,180],"toe":[108,182],"props":["banco_atras"]},{"head":[94,68],"neck":[94,84],"hip":[92,128],"sh":[100,88],"el":[100,116],"wr":[100,142],"kn":[78,156],"an":[76,182],"toe":[90,184],"props":["banco_atras"]}],"face_pull":[{"head":[100,40],"neck":[100,56],"hip":[100,104],"sh":[108,60],"el":[140,50],"wr":[174,42],"kn":[100,142],"an":[100,176],"toe":[114,178],"props":["suelo","banda"]},{"head":[100,40],"neck":[100,56],"hip":[100,104],"sh":[108,60],"el":[140,46],"wr":[112,32],"kn":[100,142],"an":[100,176],"toe":[114,178],"props":["suelo","banda"]}],"burpee":[{"head":[100,30],"neck":[100,46],"hip":[100,96],"sh":[100,50],"el":[66,44],"wr":[44,22],"kn":[100,138],"an":[100,174],"toe":[112,176],"props":[]},{"head":[52,112],"neck":[68,116],"hip":[120,132],"sh":[70,118],"el":[70,146],"wr":[72,166],"kn":[152,142],"an":[176,158],"toe":[184,158],"props":[]}],"pullover":[{"head":[40,120],"neck":[58,120],"hip":[120,124],"sh":[58,120],"el":[52,96],"wr":[50,72],"kn":[150,120],"an":[168,150],"toe":[180,152],"props":[]},{"head":[40,120],"neck":[58,120],"hip":[120,124],"sh":[58,120],"el":[38,102],"wr":[16,96],"kn":[150,120],"an":[168,150],"toe":[180,152],"props":[]}]};
+const POSE_OF={"flexion":"flexion","flexion_incl":"flexion_incl","flexion_diamante":"flexion","fondos_silla":"fondo","pike":"pike","sentadilla":"sentadilla","zancada":"zancada","sentadilla_bulgara":"bulgara","puente_glut":"puente","patada_glut":"patada","superman":"superman","remo_toalla":"remo","remo_mesa":"remo","curl_mochila":"curl","plancha":"plancha","crunch":"crunch","mountain":"mountain","rodillas_alt":"rodillas","burpee":"burpee","jumping":"jumping","press_suelo_manc":"press_banca","aperturas_suelo":"apertura","remo_manc":"remo","pullover_manc":"pullover","press_militar_manc":"press_alto","elev_lateral_manc":"lateral","curl_manc":"curl","triceps_nuca_manc":"triceps_nuca","goblet":"goblet","zancada_manc":"zancada","peso_muerto_manc":"bisagra","hip_thrust_manc":"hip_thrust","press_banda":"press_alto","remo_banda":"remo","jalon_banda":"jalon","face_pull_banda":"face_pull","curl_banda":"curl","abduccion_banda":"patada","sentadilla_banda":"sentadilla","dominadas":"dominada","dominadas_supinas":"dominada","colgado_piernas":"colgado","step_up":"step","hip_thrust_banco":"hip_thrust","press_banca_manc":"press_banca","press_incl_manc":"press_banca","press_banca":"press_banca","aperturas_polea":"apertura","jalon":"jalon","remo_barra":"remo","peso_muerto":"bisagra","press_militar":"press_alto","face_pull":"face_pull","curl_barra":"curl","triceps_polea":"triceps_nuca","sentadilla_barra":"sentadilla","prensa":"sentadilla","hip_thrust":"hip_thrust","peso_muerto_rum":"bisagra","abd_polea":"crunch"};
+
+/* ============ FIGURAS DE EJERCICIO ============ */
+const PROP_SVG={
+ suelo:'<path d="M8 186 L192 186" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".35"/>',
+ barra_alta:'<path d="M30 22 L170 22" stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity=".45"/>',
+ polea_alta:'<path d="M40 14 L160 14" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity=".35"/>',
+ banco_alto:'<rect x="24" y="132" width="118" height="12" rx="5" fill="currentColor" opacity=".3"/>',
+ banco_bajo:'<rect x="58" y="140" width="70" height="12" rx="5" fill="currentColor" opacity=".3"/>',
+ banco_atras:'<rect x="118" y="150" width="66" height="12" rx="5" fill="currentColor" opacity=".3"/>',
+ cajon:'<rect x="22" y="150" width="76" height="36" rx="6" fill="currentColor" opacity=".3"/>',
+ banda:'<path d="M178 20 L178 170" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".35"/>'
+};
+const JOINTS=['head','neck','hip','sh','el','wr','kn','an','toe'];
+function lerpPose(a,b,t){ const o={}; JOINTS.forEach(j=>{ o[j]=[a[j][0]+(b[j][0]-a[j][0])*t, a[j][1]+(b[j][1]-a[j][1])*t]; }); return o; }
+function figureSVG(p,props){
+  const L=(x,y)=>`M${x[0]} ${x[1]} L${y[0]} ${y[1]}`;
+  let hand='';
+  if(props.includes('mancuerna')) hand=`<rect x="${p.wr[0]-4}" y="${p.wr[1]-13}" width="8" height="26" rx="3" fill="var(--coral)"/>`;
+  else if(props.includes('barra_manos')) hand=`<path d="M${p.wr[0]-30} ${p.wr[1]} L${p.wr[0]+30} ${p.wr[1]}" stroke="var(--coral)" stroke-width="6" stroke-linecap="round"/>`;
+  return props.map(n=>PROP_SVG[n]||'').join('')+
+    `<g stroke="var(--coral)" stroke-width="9" stroke-linecap="round" fill="none">
+      <path d="${L(p.neck,p.hip)}"/><path d="${L(p.sh,p.el)}"/><path d="${L(p.el,p.wr)}"/>
+      <path d="${L(p.hip,p.kn)}"/><path d="${L(p.kn,p.an)}"/><path d="${L(p.an,p.toe)}"/>
+    </g><circle cx="${p.head[0]}" cy="${p.head[1]}" r="13" fill="var(--coral)"/>`+hand;
+}
+let figTimer=null;
+function renderFigure(exId){
+  const host=document.getElementById('exercise-figure'); if(!host) return;
+  const key=POSE_OF[exId]; 
+  if(!key||!POSES[key]){ host.innerHTML=''; return; }
+  const [A,B]=POSES[key], props=B.props||[];
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  clearInterval(figTimer);
+  const paint=t=>{ host.innerHTML=`<svg viewBox="0 0 200 200" style="width:100%;height:100%;color:var(--ink-dim)">${figureSVG(lerpPose(A,B,t),props)}</svg>`; };
+  if(reduce){ paint(1); return; }
+  let f=0;
+  figTimer=setInterval(()=>{
+    f=(f+1)%120;
+    const x=f/120, t=x<.5?x*2:2-x*2;          // ida y vuelta
+    paint(t<0?0:t>1?1:t*t*(3-2*t));           // suavizado
+  },28);
+}
+function stopFigure(){ clearInterval(figTimer); }
 
 /* ============ EQUIPO ============ */
 const EQUIP=[
@@ -1036,6 +1078,7 @@ function renderExercise(){
   document.getElementById('workout-exercise-name').innerText=e.n;
   document.getElementById('workout-exercise-desc').innerText=e.d;
   setIcon(document.getElementById('workout-exercise-icon'),e.i);
+  renderFigure(id);
   document.getElementById('col-a').innerText = e.t==='load'?'Peso (kg)':(e.t==='time'?'—':'—');
 
   const lastEl=document.getElementById('workout-exercise-last');
@@ -1109,7 +1152,7 @@ function askCloseWorkout(){
   if(!anyDone){ closeWorkout(); return; }
   openConfirm('¿Salir del entrenamiento?','Se perderán las series que marcaste en esta sesión.',()=>{ closeConfirm(); closeWorkout(); });
 }
-function closeWorkout(){ clearInterval(W.clock); skipRest();
+function closeWorkout(){ clearInterval(W.clock); skipRest(); stopFigure();
   const m=document.getElementById('workout-modal'); m.classList.add('hidden'); m.classList.remove('flex'); }
 
 function finishWorkout(){
@@ -1185,21 +1228,20 @@ document.addEventListener('keydown',e=>{
 
 
 /* ============ OFFLINE ============ */
-let swReady=false;
-if('serviceWorker' in navigator){
+let swState='sin';   // 'sin' | 'listo'
+// Todo (estilos, fuentes, gráficas, figuras) va dentro de este archivo: cero peticiones de red.
+// Si además colocas sw.js junto a él, se activa el guardado offline gestionado.
+if('serviceWorker' in navigator && location.protocol!=='file:'){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js')
-      .then(()=>navigator.serviceWorker.ready)
-      .then(()=>{ swReady=true; paintOffline(); })
-      .catch(()=>{ swReady=false; paintOffline(); });
+    navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready)
+      .then(()=>{swState='listo';paintOffline();}).catch(()=>{swState='sin';paintOffline();});
   });
 }
 function paintOffline(){
   const el=document.getElementById('offline-status'); if(!el) return;
-  if(!('serviceWorker' in navigator)){ el.innerText='Este navegador no permite el modo sin conexión.'; return; }
-  el.innerText = swReady
+  el.innerText = swState==='listo'
     ? 'Guardada en este dispositivo. Funciona sin internet, aunque el gimnasio no tenga señal.'
-    : 'Preparando el modo sin conexión… recarga la página en un momento.';
+    : 'Este archivo no necesita internet: lleva todo dentro. Guárdalo en tu dispositivo y ábrelo cuando quieras.';
 }
 window.addEventListener('online', ()=>showNotification('Conexión recuperada'));
 window.addEventListener('offline', ()=>showNotification('Sin conexión. La app sigue funcionando.'));
