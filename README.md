@@ -1,6 +1,6 @@
 # Pulso
 
-App de entrenamiento en un solo archivo HTML. Sin backend, sin cuentas: tu progreso se guarda en el navegador.
+App de entrenamiento sin backend ni cuentas. Funciona sin conexión y tu progreso se guarda en tu navegador.
 
 ## Qué hace
 
@@ -13,6 +13,7 @@ App de entrenamiento en un solo archivo HTML. Sin backend, sin cuentas: tu progr
 - **Cronómetro de descanso** que arranca solo al marcar una serie.
 - **Progreso**: mapa de constancia de 12 semanas, historial de sesiones, gráfica de peso, totales de minutos y volumen.
 - Registro de agua y macronutrientes.
+- **Funciona sin internet**: se instala como app en el móvil y no hace ni una sola petición de red.
 - Exportación de todos tus datos a JSON.
 
 ## Publicar en GitHub Pages
@@ -22,18 +23,45 @@ App de entrenamiento en un solo archivo HTML. Sin backend, sin cuentas: tu progr
 3. En *Source* elige **Deploy from a branch**, rama `main`, carpeta `/ (root)`.
 4. Guarda. En un par de minutos la app queda en `https://<tu-usuario>.github.io/<repo>/`.
 
-No hace falta ningún paso de compilación para publicar: el CSS ya viene compilado en `assets/`.
+No hace falta ningún paso de compilación: `index.html` ya lleva todo dentro.
+
+El service worker **solo funciona sobre HTTPS o en `localhost`**. GitHub Pages
+sirve HTTPS, así que ahí funciona. Si abres el archivo con doble clic
+(`file://`), la app funciona pero sin modo offline gestionado.
 
 ## Estructura
 
 ```
-index.html              La app entera (HTML + CSS propio + JS)
-assets/pulso.css        Tailwind compilado, solo las clases usadas (~10 KB)
-assets/chart.umd.js     Chart.js, servido localmente
-manifest.webmanifest    Permite instalarla como app en el móvil
-src/input.css           Entrada de Tailwind (solo para recompilar)
+index.html              La app entera: HTML, CSS, JS, fuentes y Chart.js incrustados
+sw.js                   Service worker que la hace funcionar sin conexión
+manifest.webmanifest    Datos para instalarla como app en el móvil
+icons/                  Iconos de la app (192, 512, maskable, apple-touch)
+assets/                 Piezas sueltas, solo para reconstruir index.html
+src/input.css           Entrada de Tailwind
 tailwind.config.js      Configuración de Tailwind
 ```
+
+Los cuatro primeros son los que hay que subir. `assets/` y `src/` solo hacen falta si vas a modificar el diseño.
+
+## Cómo funciona sin conexión
+
+No hay ni una petición a servidores externos: Tailwind compilado, Chart.js y las
+dos tipografías (Oswald y Work Sans, en formato variable) van incrustadas en el
+propio `index.html`.
+
+El service worker usa *network-first* para el HTML y *cache-first* para el resto.
+En la práctica: si hay internet recibes la última versión publicada; si no la hay
+—un gimnasio en sótano, el metro, un avión— la app abre igual desde la copia
+guardada, con todo el historial intacto.
+
+Para instalarla en el móvil: ábrela en el navegador y elige "Añadir a la pantalla
+de inicio". Arranca a pantalla completa, sin barra de direcciones.
+
+Puedes comprobar el estado en **Perfil → Sin conexión**.
+
+> Al publicar una versión nueva, sube también `sw.js` con el número de `CACHE`
+> cambiado (`pulso-v1` → `pulso-v2`). Si no, los navegadores que ya tengan la app
+> guardada podrían seguir sirviendo la versión anterior.
 
 ## Recompilar el CSS
 
