@@ -1,0 +1,18 @@
+{
+  "name": "pulso",
+  "version": "1.0.0",
+  "description": "App de entrenamiento en un solo archivo HTML, con guardado local.",
+  "scripts": {
+    "build:css": "tailwindcss -i src/input.css -o assets/pulso.css --minify",
+    "watch:css": "tailwindcss -i src/input.css -o assets/pulso.css --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0"
+  },
+  "private": true
+}

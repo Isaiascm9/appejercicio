@@ -1,0 +1,11 @@
+{
+  "name": "Pulso — Entrena a tu ritmo",
+  "short_name": "Pulso",
+  "description": "Entrenamientos con registro serie por serie, récords personales e historial.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0F1615",
+  "theme_color": "#0F1615",
+  "orientation": "portrait"
+}
